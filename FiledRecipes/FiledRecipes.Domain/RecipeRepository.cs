@@ -10,11 +10,19 @@ namespace FiledRecipes.Domain
     /// </summary>
     public class RecipeRepository : IRecipeRepository
     {
+        
         /// <summary>
         /// Represents the recipe section.
         /// </summary>
         private const string SectionRecipe = "[Recept]";
+        
+        //StreamReader reader = new StreamReader(_path);
+        //while(line = reader)
+        //    {
 
+        //    }
+
+        
         /// <summary>
         /// Represents the ingredients section.
         /// </summary>
@@ -44,6 +52,7 @@ namespace FiledRecipes.Domain
         /// The fully qualified path and name of the file with recipes.
         /// </summary>
         private string _path;
+        //"recipes.txt"
 
         /// <summary>
         /// Indicates whether the collection of recipes has been modified since it was last saved.
