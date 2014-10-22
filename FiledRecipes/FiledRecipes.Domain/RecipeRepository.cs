@@ -13,6 +13,8 @@ namespace FiledRecipes.Domain
         public void Load()
         {
             List<String> Recipe = new List<string>();
+            RecipeReadStatus status = RecipeReadStatus.Indefinite;
+            
             using (StreamReader reader = new StreamReader("recipes.txt"))
             {
                 string line;
@@ -23,23 +25,29 @@ namespace FiledRecipes.Domain
                     {
                         //continue read document
                     }
-                    if (line.Contains(SectionRecipe))
+                    if (line == SectionRecipe)
                     {
-                        Console.WriteLine(line); //läs tills en rad med []
-                            while(line.Contains("["))
-                            {
-                                break;
-                            }
-                    else if (line.Contains(SectionIngredients))
-                    {
-                        Console.WriteLine(SectionRecipe);
+                        status = RecipeReadStatus.New;
+                        //Console.WriteLine(line); //läs tills en rad med []
+                        //    while(line.Contains("["))
+                        //    {
+                        //        break;
+                        //    }
                     }
-                    else if ()
+                    else if (line == SectionIngredients)
                     {
-
+                        status = RecipeReadStatus.Ingredient;
                     }
-                    else{
-                        //läs till 
+                    else if (line == SectionInstructions)
+                    {
+                        status = RecipeReadStatus.Instruction;
+                    }
+                    else
+                    {
+                        if(status = )
+                        {
+                            Recipe
+                        }
                     }
                 }
             }
