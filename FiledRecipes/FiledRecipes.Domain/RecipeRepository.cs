@@ -10,18 +10,44 @@ namespace FiledRecipes.Domain
     /// </summary>
     public class RecipeRepository : IRecipeRepository
     {
-        
+        public void Load()
+        {
+            List<String> Recipe = new List<string>();
+            using (StreamReader reader = new StreamReader("recipes.txt"))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        //continue read document
+                    }
+                    if (line.Contains(SectionRecipe))
+                    {
+                        Console.WriteLine(line); //läs tills en rad med []
+                            while(line.Contains("["))
+                            {
+                                break;
+                            }
+                    else if (line.Contains(SectionIngredients))
+                    {
+                        Console.WriteLine(SectionRecipe);
+                    }
+                    else if ()
+                    {
+
+                    }
+                    else{
+                        //läs till 
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Represents the recipe section.
         /// </summary>
         private const string SectionRecipe = "[Recept]";
-        
-        //StreamReader reader = new StreamReader(_path);
-        //while(line = reader)
-        //    {
-
-        //    }
-
         
         /// <summary>
         /// Represents the ingredients section.
