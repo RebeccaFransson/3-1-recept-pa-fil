@@ -12,7 +12,7 @@ namespace FiledRecipes.Domain
     {
         public void Load()
         {
-            List<String> Recipe = new List<string>();
+            List<String> RecipeList = new List<string>();
             RecipeReadStatus status = RecipeReadStatus.Indefinite; //status will become the next line in document
             using (StreamReader reader = new StreamReader("recipes.txt"))
             {
@@ -48,14 +48,21 @@ namespace FiledRecipes.Domain
                         }
                         else if(status == RecipeReadStatus.Ingredient)
                         {
-                            Recipe recepieName = new Recipe(line);
-                             //skapar ett nytt objekt med receptets ingredienser
-                             string[] values = line.Split(';');
-                            Recipe.AddRange(values);
+                            string[] values = line.Split(';');
+                            RecipeList.AddRange(values);
+
                             if(values.Length != 3 ) //If the array() is not equal to 3, throw new exeption
                             {
                                 throw new FileFormatException();
                             }
+
+                            Recipe recipe = new Recipe(line); //skapar ett nytt objekt med receptets ingredienser
+                            Ingredient ingredient = new Ingredient();
+                            ingredient.Amount = values[0];
+                            ingredient.Measure = values[1];
+                            ingredient.Name = values[2];
+
+                            recipe.Add(ingredient); //adds a ingredient object to the recipe list with ingredients
                         }
                     }
                 }
