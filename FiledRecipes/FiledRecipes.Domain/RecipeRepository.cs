@@ -13,8 +13,7 @@ namespace FiledRecipes.Domain
         public void Load()
         {
             List<String> Recipe = new List<string>();
-            RecipeReadStatus status = RecipeReadStatus.Indefinite;
-            
+            RecipeReadStatus status = RecipeReadStatus.Indefinite; //status will become the next line in document
             using (StreamReader reader = new StreamReader("recipes.txt"))
             {
                 string line;
@@ -23,16 +22,13 @@ namespace FiledRecipes.Domain
 
                     if (string.IsNullOrWhiteSpace(line))
                     {
+                        line = reader.ReadLine();
                         //continue read document
                     }
                     if (line == SectionRecipe)
                     {
-                        status = RecipeReadStatus.New;
-                        //Console.WriteLine(line); //läs tills en rad med []
-                        //    while(line.Contains("["))
-                        //    {
-                        //        break;
-                        //    }
+                        status = RecipeReadStatus.New; //status will become the next line in document
+                        
                     }
                     else if (line == SectionIngredients)
                     {
@@ -44,9 +40,22 @@ namespace FiledRecipes.Domain
                     }
                     else
                     {
-                        if(status = )
+                        if(status == RecipeReadStatus.New)
                         {
-                            Recipe
+                            Recipe recipe = new Recipe(line);
+                            
+                             //skapar ett nytt objekt med receptets namn
+                        }
+                        else if(status == RecipeReadStatus.Ingredient)
+                        {
+                            Recipe recepieName = new Recipe(line);
+                             //skapar ett nytt objekt med receptets ingredienser
+                             string[] values = line.Split(';');
+                            Recipe.AddRange(values);
+                            if(values.Length != 3 ) //If the array() is not equal to 3, throw new exeption
+                            {
+                                throw new FileFormatException();
+                            }
                         }
                     }
                 }
