@@ -10,6 +10,10 @@ namespace FiledRecipes.Domain
     /// </summary>
     public class RecipeRepository : IRecipeRepository
     {
+        public void Save()
+        {
+
+        }
         public void Load()
         {
             List<IRecipe> RecipeList = new List<IRecipe>();
@@ -77,9 +81,8 @@ namespace FiledRecipes.Domain
 
                 IEnumerable<IRecipe> RepiceSort = RecipeList.OrderBy(recipe => recipe.Name); //?
                 _recipes = new List<IRecipe>(RepiceSort);
-
-                 
-
+                IsModified = false;
+                OnRecipesChanged(EventArgs.Empty);//Recipe have been read
             }
         }
         /// <summary>
