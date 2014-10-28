@@ -12,8 +12,9 @@ namespace FiledRecipes.Domain
     {
         public void Load()
         {
-            List<String> RecipeList = new List<string>();
+            List<IRecipe> RecipeList = new List<IRecipe>();
             RecipeReadStatus status = RecipeReadStatus.Indefinite; //status will become the next line in document
+            Recipe recipe = null;
             using (StreamReader reader = new StreamReader("recipes.txt"))
             {
                 string line;
@@ -42,21 +43,20 @@ namespace FiledRecipes.Domain
                     {
                         if(status == RecipeReadStatus.New)
                         {
-                            Recipe recipe = new Recipe(line);
+                            recipe = new Recipe(line);
                             
                              //skapar ett nytt objekt med receptets namn
                         }
                         else if(status == RecipeReadStatus.Ingredient)
                         {
-                            string[] values = line.Split(';');
-                            RecipeList.AddRange(values);
+                            string[] values = line.Split(new char[]{ ';' }); // Making a new array with three sections
 
                             if(values.Length != 3 ) //If the array() is not equal to 3, throw new exeption
                             {
                                 throw new FileFormatException();
                             }
 
-                            Recipe recipe = new Recipe(line); //skapar ett nytt objekt med receptets ingredienser
+                            //recipe = new Recipe(line); //skapar ett nytt objekt med receptets ingredienser
                             Ingredient ingredient = new Ingredient();
                             ingredient.Amount = values[0];
                             ingredient.Measure = values[1];
@@ -64,8 +64,22 @@ namespace FiledRecipes.Domain
 
                             recipe.Add(ingredient); //adds a ingredient object to the recipe list with ingredients
                         }
+                        else if (status == RecipeReadStatus.Instruction)
+                        {
+                            recipe.Add(line);
+                        }
+                        else
+                        {
+                            throw new FileFormatException();
+                        }
                     }
                 }
+
+                IEnumerable<IRecipe> RepiceSort = RecipeList.OrderBy(recipe => recipe.Name); //?
+                _recipes = new List<IRecipe>(RepiceSort);
+
+                 
+
             }
         }
         /// <summary>
