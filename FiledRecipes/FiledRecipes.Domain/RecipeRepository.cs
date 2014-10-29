@@ -10,81 +10,86 @@ namespace FiledRecipes.Domain
     /// </summary>
     public class RecipeRepository : IRecipeRepository
     {
-        public void Save()
+        public void Save() //visa recept - if redan finns - skriv över
         {
 
+            using (StreamWriter reader = new StreamWriter("recipes.txt"))
+            { 
+            
+            }
         }
         public void Load()
         {
             List<IRecipe> RecipeList = new List<IRecipe>();
             RecipeReadStatus status = RecipeReadStatus.Indefinite; //status will become the next line in document
-            
-            using (StreamReader reader = new StreamReader("recipes.txt"))
+            try
             {
-                Recipe recipe = null;
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                using (StreamReader reader = new StreamReader("recipes.txt"))
                 {
+                    Recipe recipe = null;
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
 
-                    if (string.IsNullOrWhiteSpace(line))
-                    {
-                        line = reader.ReadLine();
-                        //continue read document
-                    }
-                    if (line == SectionRecipe)
-                    {
-                        status = RecipeReadStatus.New; //status will become the next line in document
-                        
-                    }
-                    else if (line == SectionIngredients)
-                    {
-                        status = RecipeReadStatus.Ingredient;
-                    }
-                    else if (line == SectionInstructions)
-                    {
-                        status = RecipeReadStatus.Instruction;
-                    }
-                    else
-                    {
-                        if(status == RecipeReadStatus.New)
+                        if (string.IsNullOrWhiteSpace(line))
                         {
-                            recipe = new Recipe(line);
-                            
-                             //skapar ett nytt objekt med receptets namn
+                            line = reader.ReadLine();
+                            //continue read document
                         }
-                        else if(status == RecipeReadStatus.Ingredient)
+                        if (line == SectionRecipe)
                         {
-                            string[] values = line.Split(new char[]{ ';' }); // Making a new array with three sections
-
-                            if(values.Length != 3 ) //If the array() is not equal to 3, throw new exeption
-                            {
-                                throw new FileFormatException();
-                            }
-
-                            //recipe = new Recipe(line); //skapar ett nytt objekt med receptets ingredienser
-                            Ingredient ingredient = new Ingredient();
-                            ingredient.Amount = values[0];
-                            ingredient.Measure = values[1];
-                            ingredient.Name = values[2];
-
-                            recipe.Add(ingredient); //adds a ingredient object to the recipe list with ingredients
+                            status = RecipeReadStatus.New; //status will become the next line in document
                         }
-                        else if (status == RecipeReadStatus.Instruction)
+                        else if (line == SectionIngredients)
                         {
-                            recipe.Add(line);
+                            status = RecipeReadStatus.Ingredient; // --:--
+                        }
+                        else if (line == SectionInstructions)
+                        {
+                            status = RecipeReadStatus.Instruction; // --:--
                         }
                         else
                         {
-                            throw new FileFormatException();
+                            if (status == RecipeReadStatus.New)
+                            {
+                                recipe = new Recipe(line);//skapar ett nytt objekt med receptets namn
+                            }
+                            else if (status == RecipeReadStatus.Ingredient)
+                            {
+                                string[] values = line.Split(new char[] { ';' }); // Making a new array with three sections
+
+                                if (values.Length != 3) //If the array() is not equal to 3, throw new exeption
+                                {
+                                    throw new FileFormatException();
+                                }
+                                Ingredient ingredient = new Ingredient();
+                                ingredient.Amount = values[0];
+                                ingredient.Measure = values[1];
+                                ingredient.Name = values[2];
+
+                                recipe.Add(ingredient); //adds a ingredient object to the recipelist with ingredients
+                            }
+                            else if (status == RecipeReadStatus.Instruction)
+                            {
+                                recipe.Add(line);
+                            }
+                            else
+                            {
+                                throw new FileFormatException();
+                            }
                         }
                     }
                 }
-            }
+            
             IEnumerable<IRecipe> RepiceSort = RecipeList.OrderBy(recipe => recipe.Name); //sorting the list with recipe on the recipes name
             _recipes = new List<IRecipe>(RepiceSort);
             IsModified = false;
             OnRecipesChanged(EventArgs.Empty);//Recipe have been read
-            
+            }
+            catch
+            {
+
+            }
         }
         /// <summary>
         /// Represents the recipe section.

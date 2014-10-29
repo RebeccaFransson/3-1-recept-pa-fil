@@ -151,7 +151,7 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="FiledRecipes.App.Mvp.ViewBase">
+  <Class Name="FiledRecipes.App.Mvp.ViewBase" Collapsed="true">
     <Position X="1.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BQAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAgAAAAA=</HashCode>
@@ -203,7 +203,7 @@
       <HashCode>AQgAAIkAQgCEAEACAAABEDAgKQQpAICAAAAAAAAAAoA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="FiledRecipes.Views.MenuView">
+  <Class Name="FiledRecipes.Views.MenuView" Collapsed="true">
     <Position X="0.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAEAAAAAAAAACBAAAA=</HashCode>
@@ -211,7 +211,7 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="FiledRecipes.Views.RecipeView">
+  <Class Name="FiledRecipes.Views.RecipeView" Collapsed="true">
     <Position X="2.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
