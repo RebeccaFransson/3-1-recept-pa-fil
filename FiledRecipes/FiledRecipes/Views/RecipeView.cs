@@ -15,26 +15,31 @@ namespace FiledRecipes.Views
     {
         public void Show(IEnumerable<IRecipe> recipes) //
         {
-            ContinueOnKeyPressed();
+            foreach (var recipe in recipes)
+            {
+                Show(recipe);
+                ContinueOnKeyPressed();
+            }
+            
         }
 
         public void Show(IRecipe recipe)
         {
             Console.Clear();
-            Header = recipe.Name; //giving Header a value, shoing the header, and a message(ContiuneOnkeyPressed)
+            Header = recipe.Name; //giving Header a value, showing the header
             ShowHeaderPanel();
 
-            Console.WriteLine("INGREDIENSER\n==================");
-            foreach (var ingredients in recipe.Ingredients)
+            Console.WriteLine("\nINGREDIENSER\n==================");
+            foreach (var ingredients in recipe.Ingredients) //making a loop that writes all ingredients
 	        {
                 Console.WriteLine(ingredients);
 	        }
 
             int i = 1;
-            Console.WriteLine("INSTRUKTIONER\n==================");
-            foreach (var instrutions in recipe.Instructions)
+            Console.WriteLine("\nINSTRUKTIONER\n==================");
+            foreach (var instrutions in recipe.Instructions) //making another loop
             {
-                Console.WriteLine("<{0}>\n{1}", i++, instrutions);
+                Console.WriteLine("\n<{0}>\n{1}", i++, instrutions);
             }
 
         }

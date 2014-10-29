@@ -12,30 +12,44 @@ namespace FiledRecipes.Domain
     {
         public void Save() //visa recept - if redan finns - skriv över
         {
-
-            using (StreamWriter reader = new StreamWriter("recipes.txt"))
+            using (StreamWriter writer = new StreamWriter(_path)) //shows recipe for editing
             { 
-            
+                //skriv ut texten
+                foreach (var recipe in _recipes)
+                {
+                    writer.WriteLine(SectionRecipe);//writes down to recipe.txt
+                    writer.WriteLine(recipe.Name);
+                    writer.WriteLine(SectionIngredients);
+                    foreach (var ingredients in recipe.Ingredients)
+                    {
+                        writer.WriteLine("{0};{1};{2}", ingredients.Amount, ingredients.Measure, ingredients.Name);
+                    }
+                    writer.WriteLine(SectionInstructions);
+                    foreach (var item in collection)
+                    {
+
+                    }
+                }
+
+               
+                
             }
         }
         public void Load()
         {
             List<IRecipe> RecipeList = new List<IRecipe>();
             RecipeReadStatus status = RecipeReadStatus.Indefinite; //status will become the next line in document
-            try
-            {
-                using (StreamReader reader = new StreamReader("recipes.txt"))
+            
+                using (StreamReader reader = new StreamReader(_path))
                 {
                     Recipe recipe = null;
                     string line;
                     while ((line = reader.ReadLine()) != null)
                     {
 
-                        if (string.IsNullOrWhiteSpace(line))
+                        if (!string.IsNullOrWhiteSpace(line)) //if its not NullOrWhiteSpace, continue to read lines
                         {
-                            line = reader.ReadLine();
-                            //continue read document
-                        }
+                        
                         if (line == SectionRecipe)
                         {
                             status = RecipeReadStatus.New; //status will become the next line in document
@@ -53,6 +67,7 @@ namespace FiledRecipes.Domain
                             if (status == RecipeReadStatus.New)
                             {
                                 recipe = new Recipe(line);//skapar ett nytt objekt med receptets namn
+                                RecipeList.Add(recipe); // adderar namnet till listan
                             }
                             else if (status == RecipeReadStatus.Ingredient)
                             {
@@ -78,18 +93,17 @@ namespace FiledRecipes.Domain
                                 throw new FileFormatException();
                             }
                         }
+                        }
                     }
                 }
-            
-            IEnumerable<IRecipe> RepiceSort = RecipeList.OrderBy(recipe => recipe.Name); //sorting the list with recipe on the recipes name
-            _recipes = new List<IRecipe>(RepiceSort);
+                RecipeList.TrimExcess();
+
+            _recipes = RecipeList.OrderBy(recipe => recipe.Name).ToList(); //sorting the list with recipe on the recipes name
             IsModified = false;
             OnRecipesChanged(EventArgs.Empty);//Recipe have been read
-            }
-            catch
-            {
 
-            }
+
+            
         }
         /// <summary>
         /// Represents the recipe section.
