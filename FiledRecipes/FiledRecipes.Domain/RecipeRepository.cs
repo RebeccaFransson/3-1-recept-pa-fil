@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace FiledRecipes.Domain
 {
@@ -12,7 +13,7 @@ namespace FiledRecipes.Domain
     {
         public void Save() //visa recept - if redan finns - skriv över
         {
-            using (StreamWriter writer = new StreamWriter(_path)) //shows recipe for editing
+            using (StreamWriter writer = new StreamWriter(_path, false, Encoding.UTF8)) //shows recipe for editing, and creating a StreamWriter in UTF8 mode
             { 
                 //skriv ut texten
                 foreach (var recipe in _recipes)
@@ -20,19 +21,16 @@ namespace FiledRecipes.Domain
                     writer.WriteLine(SectionRecipe);//writes down to recipe.txt
                     writer.WriteLine(recipe.Name);
                     writer.WriteLine(SectionIngredients);
-                    foreach (var ingredients in recipe.Ingredients)
+                    foreach (var ingredients in recipe.Ingredients)//looping and writes down all lines with ingredients
                     {
                         writer.WriteLine("{0};{1};{2}", ingredients.Amount, ingredients.Measure, ingredients.Name);
                     }
                     writer.WriteLine(SectionInstructions);
-                    foreach (var item in collection)
+                    foreach (var instructions in recipe.Instructions)
                     {
-
+                        writer.WriteLine(instructions);
                     }
                 }
-
-               
-                
             }
         }
         public void Load()
