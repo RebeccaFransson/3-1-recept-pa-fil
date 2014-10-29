@@ -18,9 +18,10 @@ namespace FiledRecipes.Domain
         {
             List<IRecipe> RecipeList = new List<IRecipe>();
             RecipeReadStatus status = RecipeReadStatus.Indefinite; //status will become the next line in document
-            Recipe recipe = null;
+            
             using (StreamReader reader = new StreamReader("recipes.txt"))
             {
+                Recipe recipe = null;
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -78,12 +79,12 @@ namespace FiledRecipes.Domain
                         }
                     }
                 }
-
-                IEnumerable<IRecipe> RepiceSort = RecipeList.OrderBy(recipe => recipe.Name); //?
-                _recipes = new List<IRecipe>(RepiceSort);
-                IsModified = false;
-                OnRecipesChanged(EventArgs.Empty);//Recipe have been read
             }
+            IEnumerable<IRecipe> RepiceSort = RecipeList.OrderBy(recipe => recipe.Name); //sorting the list with recipe on the recipes name
+            _recipes = new List<IRecipe>(RepiceSort);
+            IsModified = false;
+            OnRecipesChanged(EventArgs.Empty);//Recipe have been read
+            
         }
         /// <summary>
         /// Represents the recipe section.
